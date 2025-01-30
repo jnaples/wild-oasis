@@ -12,19 +12,29 @@ export async function getCabins() {
 }
 
 export async function createEditCabin(newCabin, id) {
+  console.log(newCabin, id);
+
+  const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
+
   const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
     "/",
     ""
   ); // Remove all /'s if they're in the file name, otherwise supsabase will create subfolders
 
-  const imagePath = `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
+  const imagePath = hasImagePath
+    ? newCabin.image
+    : `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
 
-  // 1. Create cabin
-  const { data, error } = await supabase
-    .from("cabins")
-    .insert([{ ...newCabin, image: imagePath }])
-    .select()
-    .single();
+  // 1. Create/edit cabin
+  let query = supabase.from("cabins");
+
+  // A) CREATE
+  if (!id) query = query.insert([{ ...newCabin, image: imagePath }]);
+
+  // B) EDIT
+  if (id) query = query.update({ ...newCabin, image: imagePath }).eq("id", id); // In supabase, only update the row where the id = the id we passed
+
+  const { data, error } = await query.select().single(); // This is the same thing as if you wrote const {data, error} await.insert([{ ...newCabin, image: imagePath }]) but we need to use a "let" variable because we are using it for editing and creating.
 
   if (error) {
     console.error("Cabins could not be loaded");
