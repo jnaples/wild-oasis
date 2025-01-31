@@ -12,8 +12,6 @@ export async function getCabins() {
 }
 
 export async function createEditCabin(newCabin, id) {
-  console.log(newCabin, id);
-
   const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
 
   const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
@@ -27,10 +25,8 @@ export async function createEditCabin(newCabin, id) {
 
   // 1. Create/edit cabin
   let query = supabase.from("cabins");
-
   // A) CREATE
   if (!id) query = query.insert([{ ...newCabin, image: imagePath }]);
-
   // B) EDIT
   if (id) query = query.update({ ...newCabin, image: imagePath }).eq("id", id); // In supabase, only update the row where the id = the id we passed
 
@@ -42,6 +38,7 @@ export async function createEditCabin(newCabin, id) {
   }
 
   // 2. Upload image
+  if (hasImagePath) return data; // If there's already an image because user is duplicating it, skip the upload image part and just return the data so you don't have two copies of the same image in the database.
   const { error: storageError } = await supabase.storage // Rename error here because you cannot use it twice like above
     .from("cabin-images")
     .upload(imageName, newCabin.image);
