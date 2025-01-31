@@ -7,11 +7,11 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 import { useCreateCabin } from "./useCreateCabin";
-import { useEditCabin } from "./useEditCabin";
+import { useUpdateCabin } from "./useUpdateCabin";
 
 function CreateCabinForm({ cabinToEdit = {} }) {
   const { isCreating, createCabin } = useCreateCabin();
-  const { isEditing, editCabin } = useEditCabin();
+  const { isEditing, editCabin } = useUpdateCabin();
   const { id: editId, ...editValues } = cabinToEdit;
   const isWorking = isCreating || isEditing;
 
