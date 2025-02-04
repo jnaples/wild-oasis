@@ -26,21 +26,25 @@ function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
 
     if (isEditSession)
-      editCabin({ newCabinData: { ...data, image }, id: editId }),
+      editCabin(
+        { newCabinData: { ...data, image }, id: editId },
         {
           onSuccess: (data) => {
             reset();
             onCloseModal?.();
           },
-        };
+        }
+      );
     else
-      createCabin({ ...data, image: image }),
+      createCabin(
+        { ...data, image: image },
         {
           onSuccess: (data) => {
             reset();
             onCloseModal?.();
           },
-        };
+        }
+      );
   }
 
   function onError(errors) {
