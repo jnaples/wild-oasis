@@ -1,6 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { HiEllipsisVertical } from "react-icons/hi2";
+import { HiEllipsisHorizontal } from "react-icons/hi2";
 import styled from "styled-components";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 
@@ -87,6 +87,18 @@ function Menus({ children }) {
 function Toggle({ id }) {
   const { openId, close, open, setPosition } = useContext(MenusContext);
 
+  useEffect(() => {
+    function handleScroll() {
+      if (id) {
+        close();
+        document.removeEventListener("wheel", handleScroll);
+      }
+    }
+    if (id) document.addEventListener("wheel", handleScroll);
+
+    return () => document.removeEventListener("wheel", handleScroll);
+  }, [id, close]);
+
   function handleClick(e) {
     e.stopPropagation();
 
@@ -106,13 +118,11 @@ function Toggle({ id }) {
     } else {
       close();
     }
-
-    console.log("new openId = ", openId);
   }
 
   return (
     <StyledToggle onClick={handleClick}>
-      <HiEllipsisVertical />
+      <HiEllipsisHorizontal />
     </StyledToggle>
   );
 }
