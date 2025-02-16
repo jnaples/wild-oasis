@@ -108,9 +108,6 @@ function Toggle({ id }) {
       y: rect.y + rect.height + 8,
     });
 
-    console.log("openId = ", openId);
-    console.log("id = ", id);
-
     // openId === "" || openId !== id ? open(id) : close();
 
     if (openId === "" || openId !== id) {
