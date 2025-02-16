@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBooking } from "../../services/apiBookings";
 import { useParams } from "react-router-dom";
+import { getBooking } from "../../services/apiBookings";
 
 export function useBooking() {
   const { bookingId } = useParams();
@@ -10,9 +10,9 @@ export function useBooking() {
     data: booking,
     error,
   } = useQuery({
-    queryKey: ["booking"],
+    queryKey: ["booking", bookingId],
     queryFn: () => getBooking(bookingId),
-    retry: false, // By default react query tries to fetch data 3x, here we disable that
+    retry: false,
   });
 
   return { isLoading, error, booking };
