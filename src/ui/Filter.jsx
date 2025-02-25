@@ -42,6 +42,8 @@ export default function Filter({ filterField, options }) {
 
   function handleClick(value) {
     searchParams.set(filterField, value); // React hook shape see their docs
+    if (searchParams.get("page")) searchParams.set("page", 1);
+
     setSearchParams(searchParams);
   }
 
