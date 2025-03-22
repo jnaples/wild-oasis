@@ -108,8 +108,6 @@ function Toggle({ id }) {
       y: rect.y + rect.height + 8,
     });
 
-    // openId === "" || openId !== id ? open(id) : close();
-
     if (openId === "" || openId !== id) {
       open(id);
     } else {
